@@ -2,6 +2,10 @@
 
 A wrapper for YoutubeDL.
 
+```plaintext
+$ python ytdl.py --help
+YTDLer v0.2.5
+
 -u|--url \<URL\>        The YouTube URL or a file containing YouTube URLs.
 -v|--video            Download video and audio.
 -a|--audio            Download audio only.
@@ -12,3 +16,4 @@ A wrapper for YoutubeDL.
 -s|--simulate         Do not download the video files.
 
 NOTE: You can use multiple `--url` switches to download multiple videos/audio/playlists.
+```
