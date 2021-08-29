@@ -2,3 +2,14 @@ YTDLer-env
 __pycache__
 .vscode
 ytdl.log
+*.mp4
+*.mkv
+*.temp
+*.webm
+*.m4a
+*.aac
+*.mp3
+*.lrc
+*.ass
+*.srt
+*.vtt
