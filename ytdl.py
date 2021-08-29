@@ -754,12 +754,16 @@ class Downloader():
                     "postprocessors": [
                         {
                             "key": "FFmpegEmbedSubtitle"
+                        },
+                        {
+                            "key": "FFmpegMetadata"
                         }
                     ],
                     "progress_hooks": [YTDLHook(self.logger).main],
                     "verbose": self.debug,
                     "nooverwrites": no_overwrites,
                     "simulate": self.simulate,
+                    "debug_printtraffic": self.debug,
                     "outtmpl": os.path.join(self.temp_dl_path, "%(title)s - %(id)s.%(ext)s")
                 }
 
@@ -859,6 +863,9 @@ class Downloader():
                         {
                             "key": "FFmpegSubtitlesConvertor",
                             "format": "lrc"
+                        },
+                        {
+                            "key": "FFmpegMetadata"
                         }
                     ],
                     "logger": self.logger,
@@ -866,6 +873,7 @@ class Downloader():
                     "progress_hooks": [YTDLHook(self.logger).main],
                     "nooverwrites": no_overwrites,
                     "simulate": self.simulate,
+                    "debug_printtraffic": self.debug,
                     "outtmpl": os.path.join(self.temp_dl_path, "%(title)s - %(id)s.%(ext)s")
                 }
 
@@ -937,7 +945,7 @@ class Main():
         """
 
         self.name = "YTDLer"
-        self.versiont = (0, 2, 5)  # Version in tuple datatype.
+        self.versiont = (0, 2, 6)  # Version in tuple datatype.
         self.versions = '.'.join(map(lambda x: str(x), self.versiont))  # Version in string datatype.
         self.title = f"{self.name} v{self.versions}"
 
