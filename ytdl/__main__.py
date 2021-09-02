@@ -26,7 +26,16 @@ For more information, please refer to <https://unlicense.org>
 """
 
 import sys
+from time import asctime
 
+from core import info
 from core import cmd_handler
+from core.SimpleLogger.logger import LoggingObject
 
-sys.exit(cmd_handler.main())
+logger = LoggingObject(
+    name=info.name,
+    logfile=info.logfile
+)
+logger.info(f"{info.title} started on {asctime()}.")
+
+sys.exit(cmd_handler.main(logger))

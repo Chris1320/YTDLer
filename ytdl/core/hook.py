@@ -25,6 +25,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 For more information, please refer to <https://unlicense.org>
 """
 
+import os
 from datetime import timedelta
 
 from core.ASCIIGraphs.asciigraphs import ASCIIGraphs
@@ -43,7 +44,6 @@ class YTDLHook():
         """
 
         self.logger = logger
-        self.desc_length = 75   # Hardcoded TODO: Find a way to fix it without hardcoding anything (characters are not cleared in stdout when flushing)
 
     def size_converter(self, bytes_to_convert: int, divisor: int = 1024):
         """
@@ -140,8 +140,8 @@ class YTDLHook():
 
         # self.logger.info("Assembling description.")
         desc = f"[i] Downloaded: {dl_size[0]}{dl_size[1]}/{t_size[0]}{t_size[1]} ({percentage}%) [ETA: {eta}{speed}]"
-        if len(desc) < self.desc_length:
-            desc = desc + (' ' * (self.desc_length - len(desc)))
+        if len(desc) < os.get_terminal_size()[1]:
+            desc = desc + (' ' * (os.get_terminal_size()[1] - len(desc)))
 
         # self.logger.debug(desc)
 

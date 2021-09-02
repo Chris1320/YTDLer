@@ -25,17 +25,20 @@ OTHER DEALINGS IN THE SOFTWARE.
 For more information, please refer to <https://unlicense.org>
 """
 
-# Program name
-name = "YTDLer"
 
-# Program version
-version = {
-    tuple: (0, 2, 7),  # Version in tuple datatype.
-    str: None  # Will be populated after this dictionary declaration.
-}
-version[str] = '.'.join(map(lambda x: str(x), version[tuple]))  # Version in string datatype.
+# This is just a class that does nothing.
+class Logger():
+    def info():
+        pass
 
-# Program title
-title = f"{name} v{version[str]}"
+    def warning():
+        pass
 
-logfile = "ytdl.log"
+    def error():
+        pass
+
+    def debug():
+        pass
+
+    def critical():
+        pass
