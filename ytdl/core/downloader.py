@@ -32,7 +32,6 @@ import youtube_dl
 
 from core import info
 from core.hook import YTDLHook
-from core.ConfigHandler import config_handler
 
 
 class Downloader():
@@ -109,7 +108,7 @@ class Downloader():
                     ydl_opts["format"] = "bestvideo"
 
                 else:
-                    ydl_opts["format"] = "bestvideo+bestaudio"
+                    ydl_opts["format"] = "bestvideo+bestaudio/best"
 
                 self.logger.info("Extracting URL info...")
                 url_info = youtube_dl.YoutubeDL(ydl_opts).extract_info(url, download=False)

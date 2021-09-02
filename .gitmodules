@@ -4,6 +4,3 @@
 [submodule "ytdl/core/SimpleLogger"]
 	path = ytdl/core/SimpleLogger
 	url = https://github.com/Chris1320/SimpleLogger-python.git
-[submodule "ytdl/core/ConfigHandler"]
-	path = ytdl/core/ConfigHandler
-	url = https://github.com/Chris1320/ConfigHandler.git

@@ -28,6 +28,7 @@ For more information, please refer to <https://unlicense.org>
 import os
 from datetime import timedelta
 
+from core import info
 from core.ASCIIGraphs.asciigraphs import ASCIIGraphs
 
 
@@ -140,8 +141,8 @@ class YTDLHook():
 
         # self.logger.info("Assembling description.")
         desc = f"[i] Downloaded: {dl_size[0]}{dl_size[1]}/{t_size[0]}{t_size[1]} ({percentage}%) [ETA: {eta}{speed}]"
-        if len(desc) < os.get_terminal_size()[1]:
-            desc = desc + (' ' * (os.get_terminal_size()[1] - len(desc)))
+        if len(desc) < info.max_desc_length:
+            desc = desc + (' ' * (info.max_desc_length - len(desc)))
 
         # self.logger.debug(desc)
 

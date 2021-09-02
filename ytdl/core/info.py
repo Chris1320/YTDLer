@@ -30,7 +30,7 @@ name = "YTDLer"
 
 # Program version
 version = {
-    tuple: (0, 2, 7),  # Version in tuple datatype.
+    tuple: (0, 2, 8),  # Version in tuple datatype.
     str: None  # Will be populated after this dictionary declaration.
 }
 version[str] = '.'.join(map(lambda x: str(x), version[tuple]))  # Version in string datatype.
@@ -41,3 +41,4 @@ title = f"{name} v{version[str]}"
 logfile = "ytdl.log"
 download_path = "downloads"
 temp_dl_path = ".temp"
+max_desc_length = 65  # `os.get_terminal_size()[1]` is not working.
