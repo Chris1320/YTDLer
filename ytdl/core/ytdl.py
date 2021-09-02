@@ -51,7 +51,7 @@ class Main():
         self.quality_override = quality_override
         self.debug = debug
         self.simulate = simulate
-        self.logger.logger
+        self.logger = logger
 
     def main(self):
         if ',' in self.url:
