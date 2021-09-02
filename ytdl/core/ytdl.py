@@ -99,7 +99,7 @@ class Main():
             print("audio:", self.audio)
             print("no_subs:", self.no_subs)
             print("no_audio:", self.no_audio)
-            print("quality:", self.quality)
+            print("quality_override:", self.quality_override)
             print("debug:", self.debug)
             print("simulate:", self.simulate)
             print()
@@ -110,7 +110,7 @@ class Main():
                     "audio": self.audio,
                     "no_subs": self.no_subs,
                     "no_audio": self.no_audio,
-                    "quality": self.quality,
+                    "quality_override": self.quality_override,
                     "debug": self.debug,
                     "simulate": self.simulate
                 }
@@ -119,6 +119,7 @@ class Main():
         if not self.video and not self.audio:
             print("[E] There are no commands. Use `--video` or `--audio`. (Use `--help` for more information.)")
 
+        error_code = 0
         if self.video:
             self.logger.info("Video download mode. Calling api.Download().video() method.")
             downloads = api.Download(
@@ -157,16 +158,15 @@ class Main():
 
             print()
             print("=================================================")
-            if len(downloads["failed"]) == 0:
-                return 0
-
-            else:
-                return 4
+            if len(downloads["failed"]) != 0:
+                error_code += 4
 
         if self.audio:
             self.logger.info("Audio download mode. Calling api.Download().audio() method.")
             downloads = api.Download(
                 url=url_list,
+                download_path=info.download_path,
+                temp_dl_path=info.temp_dl_path,
                 logger=self.logger,
                 debug=self.debug,
                 simulate=self.simulate
@@ -199,8 +199,7 @@ class Main():
 
             print()
             print("=================================================")
-            if len(downloads["failed"]) == 0:
-                return 0
+            if len(downloads["failed"]) != 0:
+                error_code += 4
 
-            else:
-                return 4
+        return error_code

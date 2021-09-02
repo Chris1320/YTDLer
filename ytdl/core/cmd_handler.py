@@ -103,6 +103,10 @@ def main(logger):
         )
     ):
         try:
+            if debug:
+                print("Session ID:", logger.session_id)
+                print()
+
             error_code = ytdl.Main(
                 url=url,
                 video=video,
@@ -132,7 +136,5 @@ def main(logger):
 
     print()
     print(info.title)
-    print()
-    print("Session ID:", logger.session_id)
     print()
     typer.run(parse_commands)
