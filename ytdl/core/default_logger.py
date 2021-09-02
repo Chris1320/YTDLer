@@ -28,17 +28,17 @@ For more information, please refer to <https://unlicense.org>
 
 # This is just a class that does nothing.
 class Logger():
-    def info():
+    def info(*args, **kwargs):
         pass
 
-    def warning():
+    def warning(*args, **kwargs):
         pass
 
-    def error():
+    def error(*args, **kwargs):
         pass
 
-    def debug():
+    def debug(*args, **kwargs):
         pass
 
-    def critical():
+    def critical(*args, **kwargs):
         pass

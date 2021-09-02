@@ -39,3 +39,5 @@ version[str] = '.'.join(map(lambda x: str(x), version[tuple]))  # Version in str
 title = f"{name} v{version[str]}"
 
 logfile = "ytdl.log"
+download_path = "downloads"
+temp_dl_path = ".temp"

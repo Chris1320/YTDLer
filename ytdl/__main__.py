@@ -25,7 +25,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 For more information, please refer to <https://unlicense.org>
 """
 
-import sys
 from time import asctime
 
 from core import info
@@ -38,4 +37,4 @@ logger = LoggingObject(
 )
 logger.info(f"{info.title} started on {asctime()}.")
 
-sys.exit(cmd_handler.main(logger))
+cmd_handler.main(logger)

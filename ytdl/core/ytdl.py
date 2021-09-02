@@ -28,6 +28,7 @@ For more information, please refer to <https://unlicense.org>
 import os
 
 from core import api
+from core import info
 
 
 class Main():
@@ -53,14 +54,24 @@ class Main():
         self.simulate = simulate
         self.logger = logger
 
+        self.logger.info("ytdl.Main().main() is called.")
+
     def main(self):
-        if ',' in self.url:
+        if self.url is None:
+            url = []
+
+        elif ',' in self.url:
             url = self.url.split(',')
 
         else:
             url = [self.url]
 
         url_list = []
+        if len(url) < 1:
+            print("[E] There are no URLs to work with. (Use `--help` for more information.)")
+            self.logger.error("There are no URLs to work with. Returning 1")
+            return 1
+
         self.logger.info("Checking if argument is a file...")
         for i in url:
             if os.path.exists(i):
@@ -76,9 +87,9 @@ class Main():
                         self.logger.info("Adding a URL to url list.")
                         url_list.append(url.replace('\n', ''))
 
-        else:
-            url_list.append(i)
-            self.logger.info("argument is not a file, added to url list.")
+            else:
+                url_list.append(i)
+                self.logger.info("argument is not a file, added to url list.")
 
         if self.debug:
             print("[i] Debug mode is on.")
@@ -105,10 +116,15 @@ class Main():
                 }
             )
 
+        if not self.video and not self.audio:
+            print("[E] There are no commands. Use `--video` or `--audio`. (Use `--help` for more information.)")
+
         if self.video:
             self.logger.info("Video download mode. Calling api.Download().video() method.")
             downloads = api.Download(
                 url=url_list,
+                download_path=info.download_path,
+                temp_dl_path=info.temp_dl_path,
                 logger=self.logger,
                 debug=self.debug,
                 simulate=self.simulate
