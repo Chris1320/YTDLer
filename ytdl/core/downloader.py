@@ -190,8 +190,7 @@ class Downloader():
                     "postprocessors": [
                         {
                             "key": "FFmpegExtractAudio",
-                            "preferredcodec": "mp3",
-                            "preferredquality": "320"
+                            "preferredcodec": "mp3"
                         },
                         {
                             "key": "FFmpegSubtitlesConvertor",
