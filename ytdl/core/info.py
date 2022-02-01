@@ -30,7 +30,7 @@ name = "YTDLer"
 
 # Program version
 version = {
-    tuple: (0, 2, 8),  # Version in tuple datatype.
+    tuple: (0, 3, 0),  # Version in tuple datatype.
     str: None  # Will be populated after this dictionary declaration.
 }
 version[str] = '.'.join(map(lambda x: str(x), version[tuple]))  # Version in string datatype.

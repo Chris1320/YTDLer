@@ -39,7 +39,7 @@ class Downloader():
     The class that handles youtube_dl calls.
     """
 
-    def __init__(self, url: list, logger, download_path: str, temp_dl_path: str, debug: bool = False, simulate: bool = False):
+    def __init__(self, url: list, logger, download_path: str, temp_dl_path: str, debug: bool = False, simulate: bool = False, cookie_filepath: str = None):
         """
         The initialization method of Downloader() class.
 
@@ -47,6 +47,7 @@ class Downloader():
         :param class logger: The logger class.
         :param bool debug: Debug mode.
         :param bool simulate: Do not download the video files.
+        :param str cookie_filepath: The filepath of the cookie file to use.
         """
 
         self.url = url
@@ -56,6 +57,7 @@ class Downloader():
         self.logger = logger
         self.temp_dl_path = temp_dl_path
         self.simulate = simulate
+        self.cookie_filepath = cookie_filepath
 
     def video(self, embed_subs: bool = True, no_audio: bool = False, quality_override: bool = False, no_overwrites: bool = True):
         """
@@ -109,6 +111,9 @@ class Downloader():
 
                 else:
                     ydl_opts["format"] = "bestvideo+bestaudio/best"
+
+                if self.cookie_filepath is not None:
+                    ydl_opts["cookiefile"] = self.cookie_filepath
 
                 self.logger.info("Extracting URL info...")
                 url_info = youtube_dl.YoutubeDL(ydl_opts).extract_info(url, download=False)
@@ -190,8 +195,7 @@ class Downloader():
                     "postprocessors": [
                         {
                             "key": "FFmpegExtractAudio",
-                            "preferredcodec": "mp3",
-                            "preferredquality": "320"
+                            "preferredcodec": "mp3"
                         },
                         {
                             "key": "FFmpegSubtitlesConvertor",
@@ -213,6 +217,9 @@ class Downloader():
                 if not no_lyrics:
                     ydl_opts["writesubtitles"] = True
                     ydl_opts["allsubtitles"] = True
+
+                if self.cookie_filepath is not None:
+                    ydl_opts["cookiefile"] = self.cookie_filepath
 
                 self.logger.info("Fetching url information.")
                 url_info = youtube_dl.YoutubeDL(ydl_opts).extract_info(url, download=False)

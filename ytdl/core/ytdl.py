@@ -56,6 +56,8 @@ class Main():
 
         self.logger.info("ytdl.Main().main() is called.")
 
+        self.cookie_filepath = os.path.join(os.getcwd(), "cookies.txt")
+
     def main(self):
         if self.url is None:
             url = []
@@ -120,20 +122,55 @@ class Main():
             print("[E] There are no commands. Use `--video` or `--audio`. (Use `--help` for more information.)")
 
         error_code = 0
+        self.logger.info("Checking if `cookies.txt` exists...")
+        if os.path.exists(self.cookie_filepath):
+            self.logger.info("`cookies.txt` exists.")
+            with open(self.cookie_filepath, 'r') as f:
+                if len(f.read()) == 0:
+                    self.logger.info("`cookies.txt` is empty.")
+                    cookie_exists = False
+
+                else:
+                    self.logger.info("`cookies.txt` is not empty.")
+                    cookie_exists = True
+
+        else:
+            self.logger.info("`cookies.txt` does not exist.")
+            cookie_exists = False
+
         if self.video:
             self.logger.info("Video download mode. Calling api.Download().video() method.")
-            downloads = api.Download(
-                url=url_list,
-                download_path=info.download_path,
-                temp_dl_path=info.temp_dl_path,
-                logger=self.logger,
-                debug=self.debug,
-                simulate=self.simulate
-            ).video(
-                not self.no_subs,
-                self.no_audio,
-                self.quality_override
-            )
+            if cookie_exists:
+                self.logger.info("Downloading using `cookies.txt`.")
+                downloads = api.Download(
+                    url=url_list,
+                    download_path=info.download_path,
+                    temp_dl_path=info.temp_dl_path,
+                    logger=self.logger,
+                    debug=self.debug,
+                    simulate=self.simulate,
+                    cookie_filepath=self.cookie_filepath
+                ).video(
+                    not self.no_subs,
+                    self.no_audio,
+                    self.quality_override
+                )
+
+            else:
+                self.logger.info("Downloading without `cookies.txt`.")
+                downloads = api.Download(
+                    url=url_list,
+                    download_path=info.download_path,
+                    temp_dl_path=info.temp_dl_path,
+                    logger=self.logger,
+                    debug=self.debug,
+                    simulate=self.simulate
+                ).video(
+                    not self.no_subs,
+                    self.no_audio,
+                    self.quality_override
+                )
+
             self.logger.info("Downloads finished, printing results.")
 
             print()
@@ -163,17 +200,34 @@ class Main():
 
         if self.audio:
             self.logger.info("Audio download mode. Calling api.Download().audio() method.")
-            downloads = api.Download(
-                url=url_list,
-                download_path=info.download_path,
-                temp_dl_path=info.temp_dl_path,
-                logger=self.logger,
-                debug=self.debug,
-                simulate=self.simulate
-            ).audio(
-                self.no_subs,
-                self.quality_override
-            )
+            if cookie_exists:
+                self.logger.info("Downloading using `cookies.txt`.")
+                downloads = api.Download(
+                    url=url_list,
+                    download_path=info.download_path,
+                    temp_dl_path=info.temp_dl_path,
+                    logger=self.logger,
+                    debug=self.debug,
+                    simulate=self.simulate,
+                    cookie_filepath=self.cookie_filepath
+                ).audio(
+                    self.no_subs,
+                    self.quality_override
+                )
+
+            else:
+                self.logger.info("Downloading without `cookies.txt`.")
+                downloads = api.Download(
+                    url=url_list,
+                    download_path=info.download_path,
+                    temp_dl_path=info.temp_dl_path,
+                    logger=self.logger,
+                    debug=self.debug,
+                    simulate=self.simulate
+                ).audio(
+                    self.no_subs,
+                    self.quality_override
+                )
 
             self.logger.info("Downloads finished, printing results.")
 

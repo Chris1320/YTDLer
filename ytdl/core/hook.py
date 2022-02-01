@@ -146,7 +146,7 @@ class YTDLHook():
 
         # self.logger.debug(desc)
 
-        self.logger.info("Calling ASCIIGraphs.")
+        # self.logger.info("Calling ASCIIGraphs.")
         ASCIIGraphs().progress_bar_manual(desc, percentage, 100)
 
     def main(self, d):
@@ -156,7 +156,7 @@ class YTDLHook():
         :param str d: The argument youtube_dl sends.
         """
 
-        self.logger.info(f"Status is `{d['status']}`...")
+        # self.logger.info(f"Status is `{d['status']}`...")
         if d["status"] == "downloading":
             self.downloading(d)
 
@@ -167,5 +167,5 @@ class YTDLHook():
             print("[i] Post-processing...")
 
         else:
-            self.logger.error("Unknown status recieved.")
+            # self.logger.error("Unknown status recieved.")
             print("[!] Unkown status recieved: `{0}`".format(d["status"]))

@@ -17,3 +17,7 @@ YTDLer v0.2.5
 
 NOTE: You can use multiple `--url` switches to download multiple videos/audio/playlists.
 ```
+
+## Using Cookies
+
+YTDLer checks if `cookies.txt` exists in the current directory. If it does, it will supply the file to youtube-dl.
