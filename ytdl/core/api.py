@@ -25,6 +25,8 @@ OTHER DEALINGS IN THE SOFTWARE.
 For more information, please refer to <https://unlicense.org>
 """
 
+import os
+
 from core import downloader
 from core import default_logger
 
@@ -34,7 +36,7 @@ class Download():
     The class the uses the downloader module.
     """
 
-    def __init__(self, url: list, download_path: str, temp_dl_path: str, logger = None, debug: bool = False, simulate: bool = False):
+    def __init__(self, url: list, download_path: str, temp_dl_path: str, logger = None, debug: bool = False, simulate: bool = False, cookie_filepath: str = None):
         """
         The initialization method of Download() class.
 
@@ -42,6 +44,7 @@ class Download():
         :param class logger: The logger class.
         :param bool debug: Debug mode.
         :param bool simulate: Do not download the video files.
+        :param str cookie_filepath: The filepath of the cookie file. (Optional)
         """
 
         self.url = url
@@ -55,6 +58,15 @@ class Download():
 
         self.temp_dl_path = temp_dl_path
         self.simulate = simulate
+        if cookie_filepath is not None:
+            if os.path.exists(cookie_filepath):
+                self.cookie_filepath = cookie_filepath
+
+            else:
+                raise FileNotFoundError("The cookie file does not exist.")
+
+        else:
+            self.cookie_filepath = None
 
     def video(self, embed_subs: bool = True, no_audio: bool = False, quality_override: bool = False, no_overwrites: bool = True):
         """
@@ -75,7 +87,8 @@ class Download():
             download_path=self.download_path,
             temp_dl_path=self.temp_dl_path,
             debug=self.debug,
-            simulate=self.simulate
+            simulate=self.simulate,
+            cookie_filepath=self.cookie_filepath
         ).video(
             embed_subs=embed_subs,
             no_audio=no_audio,
@@ -100,7 +113,8 @@ class Download():
             download_path=self.download_path,
             temp_dl_path=self.temp_dl_path,
             debug=self.debug,
-            simulate=self.simulate
+            simulate=self.simulate,
+            cookie_filepath=self.cookie_filepath
         ).audio(
             no_lyrics=no_lyrics,
             quality_override=quality_override,
