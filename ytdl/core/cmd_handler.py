@@ -25,20 +25,13 @@ OTHER DEALINGS IN THE SOFTWARE.
 For more information, please refer to <https://unlicense.org>
 """
 
-import os
 import typer
 import traceback
 
-from core import api
 from core import info
 from core import ytdl
 
 cmd_api = typer.Typer()
-
-_debug = False
-_simulate = False
-_no_overwrites = False
-url_list = {}  # Format: <url>: [<download_type>, [<options>]]
 
 
 def main(logger):

@@ -31,30 +31,26 @@ from core import downloader
 from core import default_logger
 
 
-class Download():
+class Download:
     """
     The class the uses the downloader module.
     """
 
-    def __init__(self, url: list, download_path: str, temp_dl_path: str, logger = None, debug: bool = False, simulate: bool = False, cookie_filepath: str = None):
+    def __init__(self, url: list, download_path: str, temp_dl_path: str, logger = None, debug: bool = False, simulate: bool = False, cookie_filepath: str | None = None):
         """
         The initialization method of Download() class.
 
-        :param list url: A list of URLs of the YouTube videos/playlists to download.
-        :param class logger: The logger class.
-        :param bool debug: Debug mode.
-        :param bool simulate: Do not download the video files.
-        :param str cookie_filepath: The filepath of the cookie file. (Optional)
+        :param url: A list of URLs of the YouTube videos/playlists to download.
+        :param logger: The logger class.
+        :param debug: Debug mode.
+        :param simulate: Do not download the video files.
+        :param cookie_filepath: The filepath of the cookie file. (Optional)
         """
 
         self.url = url
         self.debug = debug
         self.download_path = download_path
-        if logger is None:
-            self.logger = default_logger.Logger()
-
-        else:
-            self.logger = logger
+        self.logger = default_logger.Logger() if logger is None else logger
 
         self.temp_dl_path = temp_dl_path
         self.simulate = simulate
@@ -72,12 +68,12 @@ class Download():
         """
         Download video (with optional audio) from <self.url>.
 
-        :param bool embed_subs: Embed the subtitles?
-        :param bool no_audio: Download audio?
-        :param bool quality_override: Override quality?
-        :param bool no_overwrites: Avoid overwriting file if it already exists.
+        :param embed_subs: Embed the subtitles?
+        :param no_audio: Download audio?
+        :param quality_override: Override quality?
+        :param no_overwrites: Avoid overwriting file if it already exists.
 
-        :returns dict: A dictionary with 3 tuples (success, failed, and skipped) that contain tuples with two strings for urls and titles.
+        :returns: A dictionary with 3 tuples (success, failed, and skipped) that contain tuples with two strings for urls and titles.
                        {"success": [(<url>, <title>)], "failed": [(<url>, <title>)], "skipped": [(<url>, <title>)]}
         """
 
@@ -100,11 +96,11 @@ class Download():
         """
         Download audio from <self.url>.
 
-        :param bool no_lyrics: Download subtitles? (I assume they're lyrics)
-        :param bool quality_override: Override quality?
-        :param bool no_overwrites: Avoid overwriting file if it already exists.
+        :param no_lyrics: Download subtitles? (I assume they're lyrics)
+        :param quality_override: Override quality?
+        :param no_overwrites: Avoid overwriting file if it already exists.
 
-        :returns dict: A dictionary with three tuples (success, failed, and skipped) that contain strings of urls.
+        :returns: A dictionary with three tuples (success, failed, and skipped) that contain strings of urls.
         """
 
         return downloader.Downloader(
@@ -120,3 +116,4 @@ class Download():
             quality_override=quality_override,
             no_overwrites=no_overwrites
         )
+

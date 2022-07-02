@@ -25,15 +25,18 @@ OTHER DEALINGS IN THE SOFTWARE.
 For more information, please refer to <https://unlicense.org>
 """
 
+import logging as logger
 from time import asctime
 
 from core import info
 from core import cmd_handler
-from core.SimpleLogger.logger import LoggingObject
 
-logger = LoggingObject(
-    name=info.name,
-    logfile=info.logfile
+logger.basicConfig(
+    filename=info.logfile,
+    format="{asctime},{msecs}:{name}:{levelname}: {message}",
+    datefmt="%H:%m:%s",
+    style='{',
+    encoding="UTF-8"
 )
 logger.info(f"{info.title} started on {asctime()}.")
 

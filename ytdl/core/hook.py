@@ -25,14 +25,13 @@ OTHER DEALINGS IN THE SOFTWARE.
 For more information, please refer to <https://unlicense.org>
 """
 
-import os
+import sys
 from datetime import timedelta
 
 from core import info
-from core.ASCIIGraphs.asciigraphs import ASCIIGraphs
 
 
-class YTDLHook():
+class YTDLHook:
     """
     YouTube-DL Hook.
     """
@@ -41,19 +40,19 @@ class YTDLHook():
         """
         The initialization method of YTDLHook() class.
 
-        :param class logger: The logger object.
+        :param logger: The logger object.
         """
 
         self.logger = logger
 
-    def size_converter(self, bytes_to_convert: int, divisor: int = 1024):
+    def size_converter(self, bytes_to_convert: int, divisor: int = 1024) -> tuple[float, str]:
         """
         Automatically convert bytes into kilobytes/megabytes/etc.
 
-        :param int bytes_to_convert: This is the float to be converted.
-        :param int divisor: As far as I know, there are people who use 1000 instead of 1024 so I won't hardcode it.
+        :param bytes_to_convert: This is the float to be converted.
+        :param divisor: As far as I know, there are people who use 1000 instead of 1024 so I won't hardcode it.
 
-        :returns tuple: The value and the unit. (B, KB, MB, GB, TB, PB)
+        :returns: The value and the unit. (B, KB, MB, GB, TB, PB)
         """
 
         try:
@@ -70,93 +69,92 @@ class YTDLHook():
                         result = result / divisor
                         # Check if need to convert TB to PB.
                         if result > divisor:
-                            # self.logger.info("Returning in `petabytes` form.")
+                            self.logger.debug("Returning in `petabytes` form.")
                             return (round(result / divisor, 2), "PB")  # Let's make PB the largest unit we'll use.
 
                         else:
-                            # self.logger.info("Returning in `terabytes` form.")
+                            self.logger.debug("Returning in `terabytes` form.")
                             return (round(result, 2), "TB")
 
                     else:
-                        # self.logger.info("Returning in `gigabytes` form.")
+                        self.logger.debug("Returning in `gigabytes` form.")
                         return (round(result, 2), "GB")
 
                 else:
-                    # self.logger.info("Returning in `megabytes` form.")
+                    self.logger.debug("Returning in `megabytes` form.")
                     return (round(result, 2), "MB")
 
             else:
-                # self.logger.info("Returning in `kilobytes` form.")
+                self.logger.debug("Returning in `kilobytes` form.")
                 return (round(result, 2), "KB")
 
         except ZeroDivisionError:
-            # self.logger.info("Returning in `bytes` form.")
+            self.logger.debug("Returning in `bytes` form.")
             return (0, "B")
 
-    def downloading(self, d):
+    def downloading(self, d) -> None:
         """
-        :param str d: The argument youtube_dl sends.
+        :param d: The argument youtube_dl sends.
         """
 
-        # self.logger.info("Hook called.")
-        # self.logger.info("Setting t_size.")
+        self.logger.debug("Hook called.")
+        self.logger.debug("Setting t_size.")
         if d.get("total_bytes", None) is not None:
-            # self.logger.info("t_size is d[\"total_bytes\"]")
+            self.logger.debug("t_size is d[\"total_bytes\"]")
             t_size = self.size_converter(d.get("total_bytes", None))
             percent_divisor = d.get("total_bytes", None)
 
         elif d.get("total_bytes_estimate", None) is not None:
-            # self.logger.info("t_size is d[\"total_bytes_estimate\"]")
+            self.logger.debug("t_size is d[\"total_bytes_estimate\"]")
             t_size = self.size_converter(d.get("total_bytes_estimate", None))
             percent_divisor = d.get("total_bytes_estimate", None)
 
         else:
-            # self.logger.info("t_size is NULL.")
+            self.logger.debug("t_size is NULL.")
             t_size = "---.--"
             percent_divisor = 0
 
-        # self.logger.info("Setting dl_size.")
+        self.logger.debug("Setting dl_size.")
         dl_size = self.size_converter(d.get("downloaded_bytes", 0))
         percent_dividend = d.get("downloaded_bytes", 0)
 
         if d.get("eta", None) is not None:
-            # self.logger.info("Setting ETA.")
+            self.logger.debug("Setting ETA.")
             eta = str(timedelta(seconds=d.get("eta", 0)))
 
         else:
-            # self.logger.info("Setting ETA. (ETA is N/A)")
+            self.logger.debug("Setting ETA. (ETA is N/A)")
             eta = "N/A"
 
         if d.get("speed", None) is not None:
-            # self.logger.info("Setting speed.")
+            self.logger.debug("Setting speed.")
             speed_tmp = self.size_converter(d.get("speed", 0), 1000)  # Set it to 1000 because the unit is `bits` not `bytes`.
             speed = " | {0}{1}".format(speed_tmp[0], (speed_tmp[1].lower() + "ps"))
 
         else:
-            # self.logger.info("speed is None.")
+            self.logger.debug("speed is None.")
             speed = ""
 
-        # self.logger.info("Setting percentage.")
+        self.logger.debug("Setting percentage.")
         percentage = round((percent_dividend / percent_divisor) * 100, 1)
 
-        # self.logger.info("Assembling description.")
+        self.logger.debug("Assembling description.")
         desc = f"[i] Downloaded: {dl_size[0]}{dl_size[1]}/{t_size[0]}{t_size[1]} ({percentage}%) [ETA: {eta}{speed}]"
         if len(desc) < info.max_desc_length:
             desc = desc + (' ' * (info.max_desc_length - len(desc)))
 
-        # self.logger.debug(desc)
+        self.logger.debug(desc)
+        sys.stdout.write(f"\r{desc}")
+        sys.stdout.flush()
 
-        # self.logger.info("Calling ASCIIGraphs.")
-        ASCIIGraphs().progress_bar_manual(desc, percentage, 100)
-
-    def main(self, d):
+    def main(self, d: dict):
         """
         The main method of YTDLHook() class.
 
-        :param str d: The argument youtube_dl sends.
+        :param d: The argument youtube_dl sends.
         """
 
-        # self.logger.info(f"Status is `{d['status']}`...")
+        self.logger.debug(f"Status is `{d['status']}`...")
         if d["status"] == "downloading":
             self.downloading(d)
 
@@ -167,5 +165,5 @@ class YTDLHook():
             print("[i] Post-processing...")
 
         else:
-            # self.logger.error("Unknown status recieved.")
+            self.logger.debug(f"Unknown status recieved: {d['status']}")
             print("[!] Unkown status recieved: `{0}`".format(d["status"]))
