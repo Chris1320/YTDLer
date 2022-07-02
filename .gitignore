@@ -1,6 +1,6 @@
-YTDLer-env
-__pycache__
-.vscode
+env/
+__pycache__/
+.vscode/
 ytdl.log
 *.mp4
 *.mkv
